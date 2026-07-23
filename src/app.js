@@ -11,7 +11,12 @@ app.use(
     credentials: true,
   })
 )
-
+app.get("/", (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "Backend is running successfully"
+    });
+});
 console.log("App.js Loaded");
 app.use(express.json())
 app.use(express.urlencoded({extended : true , limit : "16kb"}))
