@@ -42,8 +42,7 @@ const blogSchema = new Schema(
     },
     category: {
       type: String,
-      required: [true, "Category is required"],
-      enum: ["Solar", "CCTV", "Electrical"],
+      required: true,
       trim: true,
       index: true,
     },
