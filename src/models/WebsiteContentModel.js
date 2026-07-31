@@ -39,18 +39,18 @@ const websiteContentSchema = new mongoose.Schema(
         },
       },
 
-      gallery: [
-        {
-          image: {
-            type: String,
-            default: "",
-          },
-          public_id: {
-            type: String,
-            default: "",
-          },
-        },
-      ],
+      // gallery: [
+      //   {
+      //     image: {
+      //       type: String,
+      //       default: "",
+      //     },
+      //     public_id: {
+      //       type: String,
+      //       default: "",
+      //     },
+      //   },
+      // ],
 
       projects: [
         {
@@ -73,6 +73,15 @@ const websiteContentSchema = new mongoose.Schema(
             type: String,
             default: "",
           },
+          link: {
+            type: String,
+            default: "",
+          },
+          technologies:{
+            type: String,
+            default : ""
+          }
+
         },
       ],
     },

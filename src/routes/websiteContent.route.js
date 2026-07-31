@@ -5,8 +5,8 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 import {
   getWebsiteContent,
   updateHeroImage,
-  addGalleryImage,
-  deleteGalleryImage,
+  updateCompanyImage,
+  deleteCompanyImage,
   addProject,
   deleteProject,
 } from "../controllers/websiteContent.controller.js";
@@ -29,17 +29,17 @@ router.patch(
 );
 
 // Aquarium Gallery
-router.post(
-  "/aquarium/gallery",
+router.patch(
+  "/:page/company-image",
   verifyJWT,
   upload.single("image"),
-  addGalleryImage
+  updateCompanyImage
 );
 
 router.delete(
-  "/aquarium/gallery/:imageId",
+  "/:page/company-image",
   verifyJWT,
-  deleteGalleryImage
+  deleteCompanyImage
 );
 
 // Agency Projects

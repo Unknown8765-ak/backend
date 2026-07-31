@@ -5,8 +5,6 @@ import { WebsiteContent } from "../models/WebsiteContentModel.js";
 import { uploadoncloudinary } from "../utils/cloudinary.js";
 import { v2 as cloudinary } from "cloudinary";
 
-
-
 export const getWebsiteContent = asyncHandler(async (req, res) => {
   const { page } = req.params;
 
@@ -26,6 +24,7 @@ export const getWebsiteContent = asyncHandler(async (req, res) => {
     )
   );
 });
+
 
 
 export const updateHeroImage = asyncHandler(async (req, res) => {
@@ -79,69 +78,74 @@ export const updateHeroImage = asyncHandler(async (req, res) => {
 
 
 
-export const addGalleryImage = asyncHandler(async (req, res) => {
+export const updateCompanyImage = asyncHandler(async (req, res) => {
+  const { page } = req.params;
 
   if (!req.file) {
-    throw new ApiError(400, "Image is required");
+    throw new ApiError(400, "About image is required");
   }
 
-  let content = await WebsiteContent.findOne({
-    page: "aquarium",
-  });
+  let content = await WebsiteContent.findOne({ page });
 
   if (!content) {
     content = await WebsiteContent.create({
-      page: "aquarium",
-      sections: {
-        gallery: [],
-      },
+      page,
+      sections: {},
     });
   }
 
-  const uploadedImage = await uploadoncloudinary(
-    req.file.path
-  );
+  // Delete old image if exists
+  if (content.sections?.about?.public_id) {
+    await cloudinary.uploader.destroy(
+      content.sections.about.public_id
+    );
+  }
 
-  content.sections.gallery.push({
+  const uploadedImage = await uploadoncloudinary(req.file.path);
+
+  if (!uploadedImage) {
+    throw new ApiError(500, "Image upload failed");
+  }
+
+  content.sections.about = {
     image: uploadedImage.url,
     public_id: uploadedImage.public_id,
-  });
+  };
 
   await content.save();
 
-  return res.status(201).json(
+  return res.status(200).json(
     new ApiResponse(
-      201,
+      200,
       content,
-      "Gallery image uploaded successfully"
+      "About image updated successfully"
     )
   );
 });
 
 
-export const deleteGalleryImage = asyncHandler(async (req, res) => {
 
-  const { imageId } = req.params;
+export const deleteCompanyImage = asyncHandler(async (req, res) => {
+  const { page } = req.params;
 
-  const content = await WebsiteContent.findOne({
-    page: "aquarium",
-  });
+  const content = await WebsiteContent.findOne({ page });
 
   if (!content) {
-    throw new ApiError(404, "Gallery not found");
+    throw new ApiError(404, "Page content not found");
   }
 
-  const image = content.sections.gallery.id(imageId);
-
-  if (!image) {
-    throw new ApiError(404, "Image not found");
+  if (!content.sections?.about?.public_id) {
+    throw new ApiError(404, "About image not found");
   }
 
   await cloudinary.uploader.destroy(
-    image.public_id
+    content.sections.about.public_id
   );
 
-  image.deleteOne();
+  content.sections.about = {
+    image: "",
+    public_id: "",
+  };
 
   await content.save();
 
@@ -149,7 +153,7 @@ export const deleteGalleryImage = asyncHandler(async (req, res) => {
     new ApiResponse(
       200,
       {},
-      "Gallery image deleted successfully"
+      "About image deleted successfully"
     )
   );
 });
@@ -158,9 +162,9 @@ export const deleteGalleryImage = asyncHandler(async (req, res) => {
 
 export const addProject = asyncHandler(async (req, res) => {
 
-  const { title, description } = req.body;
+  const { title, description,link,technologies } = req.body;
 
-  if (!title || !description || !req.file) {
+  if (!title || !link|| !technologies|| !description || !req.file) {
     throw new ApiError(400, "All fields are required");
   }
 
@@ -184,6 +188,8 @@ export const addProject = asyncHandler(async (req, res) => {
   content.sections.projects.push({
     title,
     description,
+    link,
+    technologies,
     image: uploadedImage.url,
     public_id: uploadedImage.public_id,
   });
@@ -198,7 +204,6 @@ export const addProject = asyncHandler(async (req, res) => {
     )
   );
 });
-
 
 
 export const deleteProject = asyncHandler(async (req, res) => {
