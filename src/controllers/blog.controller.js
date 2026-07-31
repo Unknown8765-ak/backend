@@ -86,7 +86,7 @@ console.log(typeof category);
             url: uploadedImage.secure_url,
             public_id: uploadedImage.public_id,
         },
-        category,
+        category : category.trim(),
         tags: formattedTags,
         author: req.user._id,
         status: status || "draft",
@@ -131,8 +131,8 @@ const getAllBlogs = asyncHandler(async (req, res) => {
 
   
     if (category) {
-        filter.category = category;
-    }
+    filter.category = category.trim();
+}
 
     if (search) {
         filter.$text = {
@@ -298,7 +298,9 @@ const updateBlog = asyncHandler(async (req, res) => {
     blog.excerpt = excerpt ?? blog.excerpt;
     blog.content = content ?? blog.content;
     blog.featuredImage = featuredImage;
-    blog.category = category ?? blog.category;
+    if (category) {
+    blog.category = category.trim().replace(/\s+/g, " ");
+}
     blog.tags = formattedTags;
     blog.status = status ?? blog.status;
     blog.metaTitle = metaTitle || title || blog.metaTitle;
