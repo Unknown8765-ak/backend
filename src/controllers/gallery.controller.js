@@ -45,7 +45,7 @@ const createGalleryImage = asyncHandler(async (req, res) => {
 const getAllGalleryImages = asyncHandler(async (req, res) => {
 
     const gallery = await Gallery.find().sort({ createdAt: -1 });
-    console.log(gallery)
+    //console.log(gallery)
     return res.status(200).json(
         new ApiResponse(
             200,
