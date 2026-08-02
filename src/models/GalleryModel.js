@@ -13,11 +13,11 @@ const gallerySchema = new mongoose.Schema(
       required: true,
     },
 
-    category: {
-      type: String,
-      enum: ["Solar", "Aquarium", "Agency"],
-      required: true,
-    },
+    // category: {
+    //   type: String,
+    //   enum: ["Solar", "Aquarium", "Agency"],
+    //   required: true,
+    // },
 
     alt: {
       type: String,
