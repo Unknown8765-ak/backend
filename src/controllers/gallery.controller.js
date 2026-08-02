@@ -9,10 +9,10 @@ import { v2 as cloudinary } from "cloudinary";
 
 const createGalleryImage = asyncHandler(async (req, res) => {
 
-    const { title, category } = req.body;
+    const { title } = req.body;
 
-    if (!title || !category) {
-        throw new ApiError(400, "Title and Category are required");
+    if (!title) {
+        throw new ApiError(400, "Title and required");
     }
 
     if (!req.file) {
@@ -27,7 +27,7 @@ const createGalleryImage = asyncHandler(async (req, res) => {
 
     const gallery = await Gallery.create({
         title,
-        category,
+        // category,
         image: uploadedImage.url,
         public_id: uploadedImage.public_id,
     });
@@ -45,7 +45,7 @@ const createGalleryImage = asyncHandler(async (req, res) => {
 const getAllGalleryImages = asyncHandler(async (req, res) => {
 
     const gallery = await Gallery.find().sort({ createdAt: -1 });
-
+    console.log(gallery)
     return res.status(200).json(
         new ApiResponse(
             200,
