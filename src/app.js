@@ -11,6 +11,7 @@ app.use(
     credentials: true,
   })
 )
+console.log(process.env.CORS_ORIGIN)
 
 // const allowedOrigins = process.env.CORS_ORIGIN
 //   .split(",")
