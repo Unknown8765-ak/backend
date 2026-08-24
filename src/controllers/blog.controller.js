@@ -1,7 +1,7 @@
 import { Blog } from "../models/BlogModel.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiReponse.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
+import { asyncHandler } from "../utils/asynchandler.js";
 import { uploadoncloudinary } from "../utils/cloudinary.js";
 
 const generateSlug = (title) => {
